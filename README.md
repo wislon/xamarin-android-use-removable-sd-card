@@ -176,8 +176,12 @@ _We have to do the check for the Android version, because the OS calls being mad
 
 And that gives us the info we need to be able to track how much space we have, and have available to play with.
 
-One caveat though: __Android KitKat (aka 4.4, aka level 19)__ won't let you __write__ to this removable disk. Ironically, earlier, more primitive versions of Android do. Why did they do this? I'm not really sure. Maybe it's an 'everything you store on our non-removable-poorly-named-externally-available-internal-storage are belong to us!'. Maybe they're tired of removable SD cards. Maybe it's a cost-cutting thing. Maybe they want to try and force people to shift their stuff into Google's cloud. I dunno... maybe I've got the wrong end of the stick this time too.
+The example solution in this repo ties this all together, with a simple UI to show the mount point of a removable SD card (as pertains to my SGS I, SGS II and a couple of other devices I've tried). I hope it's of use to someone. And if you find any funky-named removable SD card mounts which the hacky parsing we did above wouldn't have caught, please add it, and send through pull request! :)
 
-It's my foot, I should be able to shoot myself in it if I want to, right?
+One caveat: __Android KitKat (aka 4.4, aka level 19, and presumably higher)__ won't let you __write__ to this removable disk. Ironically, earlier, more primitive versions of Android do. 
 
+Why did they do this? I'm not really sure. Maybe it's an 'everything you store on our non-removable-poorly-named-externally-available-internal-storage are belong to us!'. Maybe they're tired of removable SD cards. Maybe it's a cost-cutting thing. Maybe they want to try and force people to shift their stuff into Google's cloud. I dunno... maybe I've got the wrong end of the stick this time too.
 
+But it's my foot, I should be able to shoot myself in it if I want to, right?
+
+_Everything in here is released as OSS under the MIT license, so feel free to use it any way you like._
