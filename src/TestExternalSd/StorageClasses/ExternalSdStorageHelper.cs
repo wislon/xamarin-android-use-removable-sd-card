@@ -131,9 +131,7 @@ namespace TestExternalSd.StorageClasses
       try
       {
         string contents = System.IO.File.ReadAllText("/proc/mounts");
-        var sb = new StringBuilder();
-        sb.Append(contents);
-        return sb.ToString();
+        return contents;
       }
       catch (Exception ex) // shut up about it and move on, we obviously can't have it, we can't use it.
       {
