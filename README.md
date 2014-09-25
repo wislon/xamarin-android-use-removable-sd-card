@@ -176,7 +176,7 @@ _We have to do the check for the Android version, because the OS calls being mad
 
 And that gives us the info we need to be able to track how much space we have, and have available to play with.
 
-![screenshot](https://github.com/wislon/xamarin-android-use-removable-sd-card/res/screenshot.png)
+![screenshot](https://github.com/wislon/xamarin-android-use-removable-sd-card/blob/master/res/screenshot.png)
 
 The example solution in this repo ties this all together, with a simple UI to show the mount point of a removable SD card (as pertains to my SGS I, SGS II and a couple of other devices I've tried). I hope it's of use to someone. And if you find any funky-named removable SD card mounts which the hacky parsing we did above wouldn't have caught, please add it, and send through pull request! :)
 
