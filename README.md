@@ -79,7 +79,7 @@ It's quite likely that this may not be quite good enough, because the manufactur
 OK, so now we've established how to locate the SD card (assuming we have one plugged in!). 
 
 ### Can We Write To It?
-How do we know if it's writeable? We could get all complex and try and figure out what type of user permissions we have, look at attributes on the file system and get all hard-core rock-star-coder complicated. Or we could simply just try and write to it (this could involve writing a file, creating a directory, deleting a file, etc.). 
+How do we know if it's writeable? Well, let's just try and write to it...
 
 
 ```csharp
@@ -103,7 +103,9 @@ public static bool IsWriteable(string pathToTest)
 
 ```
 
-OK, that works. But this is on an Android 4.1.2 device (not a KitKat one). We'll get to the KitKat part later. For now, it's OK, we have a removable SD card, and we can write to it. Hooray!
+_You can create directories off this path to the SD card now too, now that you have it. Exactly the same way you programmatically create them everywhere else_
+
+OK, that works. But this is on an Android 4.1.2 device (not a KitKat one). And it works all the way up to, and including, Android 4.3 (level 18) We'll get to the KitKat part later. For now, it's OK, we have a removable SD card, and we can write to it. Hooray!
 
 ### How Much Space Have We Got?
 We're not quite done yet though. The standard Xamarin/Android calls for determining how much total/available/usable/free space is available are limited to only those mount points that Android would let you access. Like the inappropriately and stupidly named `ExternalStorageDirectory`, which isn't what we want.
