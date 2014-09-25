@@ -10,6 +10,7 @@ _Sadly, due to the gamification and 'first post!' mentality of some SO posts, a 
 
 Just about all Android devs understand that the 'External' storage does NOT refer to the SD card, even tho the file system sometimes refers to it as such. For the purposes of this post, I am going to refer to this as 'removable' storage, and it will refer to a removable (and usually micro) SD card, which a person has physically plugged into the device. And this is true of the Xamarin.Android developers as well, given that the Xamarin.Android C# 'engine' is so closely tied to the Android OS.
 
+### Android is Linux-based
 Most developers building for Android are also aware, on some level, that the operating system underneath the Dalvik VM is a Linux based one. 
 
 That means that even if there's not a direct Xamarin or Android call to do what you need to do, there may sometimes be a more Linux-y way of doing it.
@@ -46,6 +47,7 @@ Can you see where we're going with this?
 
 Good.
 
+### Reading the File System
 Remember to turn on `READ_EXTERNAL_STORAGE` and `WRITE_EXTERNAL_STORAGE` permissions in your `Manifest.xml`, or you won't get the results you expect.
 
 Now we can do a simple call to `System.IO.File.ReadAllText("/proc/mounts")` to read the text out of this file, and store it in a string. We can then parse the string to look for things like  `storage`, `sdcard`, `vfat`, `ext` and anything else we think would be a good indicator. And if we can find __all of that on one file-system line__, then the file system mounted there is very likely a good candidate for our _removable_ SD card.
@@ -79,6 +81,7 @@ It's quite likely that this may not be quite good enough, because the manufactur
 
 OK, so now we've established how to locate the SD card (assuming we have one plugged in!). 
 
+### Can We Write To It?
 How do we know if it's writeable? We could get all complex and try and figure out what type of user permissions we have, look at attributes on the file system and get all hard-core rock-star-coder complicated. Or we could simply just try and write to that file system (this could involve writing a file, creating a directory, deleting a file, etc.). 
 
 
@@ -106,6 +109,7 @@ public static bool IsWriteable(string pathToTest)
 
 OK, that works. But this is on an Android 4.1.2 device (not a KitKat one). We'll get to the KitKat part later. For now, it's OK, we have a removable SD card, and we can write to it. Hooray!
 
+### How Much Space Have We Got?
 We're not quite done yet though. The standard Xamarin/Android calls for determining how much total/available/usable/free space is available are limited to only those mount points that Android would let you access. Like the inappropriately and stupidly named `ExternalStorageDirectory`, which isn't what we want.
 
 Back to Linux we go. There's a `statvfs()` call we can make to get some basic info about the mounted file system. But luckily for us, there's an object called `Android.OS.StatFS` which wraps that call for us, which makes it really easy to get to.
@@ -178,6 +182,7 @@ And that gives us the info we need to be able to track how much space we have, a
 
 The example solution in this repo ties this all together, with a simple UI to show the mount point of a removable SD card (as pertains to my SGS I, SGS II and a couple of other devices I've tried). I hope it's of use to someone. And if you find any funky-named removable SD card mounts which the hacky parsing we did above wouldn't have caught, please add it, and send through pull request! :)
 
+### Damn You Android KitKat!
 One caveat: __Android KitKat (aka 4.4, aka level 19, and presumably higher)__ won't let you __write__ to this removable disk. Ironically, earlier, more primitive versions of Android do. 
 
 Why did they do this? I'm not really sure. Maybe it's an 'everything you store on our non-removable-poorly-named-externally-available-internal-storage are belong to us!'. Maybe they're tired of removable SD cards. Maybe it's a cost-cutting thing. Maybe they want to try and force people to shift their stuff into Google's cloud. I dunno... maybe I've got the wrong end of the stick this time too.
