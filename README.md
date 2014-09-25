@@ -4,7 +4,7 @@ Demonstrates how to how to access the 'external', __REMOVABLE__ SD card plugged 
 The code example is done in C#, but exactly the same principles apply in Java, so it should be extremely easy for an Android Java dev to understand exactly what's going on.
 
 ### Background
-There's been a lot of questions on StackOverflow (and other places) about how to access the 'External Storage' on an Android device. Most people seem to want to know how to read from, and write to, __the SD card__ they just bought and put into their device. 
+There's been a lot of questions on StackOverflow (and other places) about how to access the 'External Storage' on an Android device. Most people seem to want to know how to read from (and write to) __the SD card__ the've plugged into the SD card slot in their device. 
 
 This sample project shows you how to do just that.
 
