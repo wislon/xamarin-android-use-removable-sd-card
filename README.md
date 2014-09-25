@@ -40,14 +40,11 @@ blah blah more mounted stuff blah
 /dev/block/vold/259:3 /storage/sdcard0 vfat rw,dirsync,nosuid,nodev ...
 /dev/block/vold/179:9 /storage/extSdCard vfat rw,dirsync,nosuid,nodev ...
 :
-:
 ```
 
-Notice the two last lines there. Both of those are tagged as 'sdcard', and we know one of them has to be our removable one. My money is on the `extSdCard`...
+Notice the two last lines there. Both of those are tagged as 'sdcard', and we know one of them has to be our removable one. My money is on `extSdCard`...
 
-Can you see where we're going with this? 
-
-Good.
+Can you see where we're going with this? Good.
 
 ### Reading the File System
 Remember to turn on `READ_EXTERNAL_STORAGE` and `WRITE_EXTERNAL_STORAGE` permissions in your `Manifest.xml`, or you won't get the results you expect.
@@ -105,7 +102,6 @@ public static bool IsWriteable(string pathToTest)
 }
 
 ```
-
 
 OK, that works. But this is on an Android 4.1.2 device (not a KitKat one). We'll get to the KitKat part later. For now, it's OK, we have a removable SD card, and we can write to it. Hooray!
 
@@ -179,6 +175,8 @@ Using the StatFS object in `ExternalSdStorageHelper.GetFileSystemBlockInfo()`
 _We have to do the check for the Android version, because the OS calls being made have been deprecated for older versions. The 'old style', pre Android level 18 didn't use the `Long` suffixes, so if you try and call use those on anything below Android 4.3, it'll crash on you, telling you that that those methods are unavailable. Viva fragmentation!_
 
 And that gives us the info we need to be able to track how much space we have, and have available to play with.
+
+![screenshot](https://github.com/wislon/xamarin-android-use-removable-sd-card/res/screenshot.png)
 
 The example solution in this repo ties this all together, with a simple UI to show the mount point of a removable SD card (as pertains to my SGS I, SGS II and a couple of other devices I've tried). I hope it's of use to someone. And if you find any funky-named removable SD card mounts which the hacky parsing we did above wouldn't have caught, please add it, and send through pull request! :)
 
