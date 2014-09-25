@@ -8,7 +8,7 @@ This sample project shows you how to do just that.
 
 _Sadly, due to the gamification and 'first post!' mentality of some SO posts, a lot of developers go charging off, half-cocked, and answer the question they think is being asked, instead of the one actually being asked. That's why there's so many duplicates of this type of question. And so most of the answers appear to get the concept of 'External' and 'Removable' mixed up, and then start preaching about how the 'External Storage' isn't actually EXTERNAL storage, it's just storage separate from the inaccessible, INTERNAL storage of the device. And sometimes that maybe the questioner is being a moron for getting the two concepts confused, and this may be a duplicate of that question over there. So most of those answers are essentially identical in implementation, and completely have the wrong end of the stick. Or the wrong stick._
 
-Just about all Android devs understand that the 'External' storage does NOT refer to the SD card, even tho the file system sometimes refers to it as such. For the purposes of this post, I am going to refer to this as 'removable' storage, and it will refer to a removable (and usually micro) SD card, which a person has physically plugged into the device. And this is true of the Xamarin.Android developers as well, given that the Xamarin.Android C# 'engine' is so closely tied to the Android OS.
+Just about all developers who build for Android understand that the 'External' storage does NOT refer to the removable SD card, even tho the file system sometimes refers to it as such. For the purposes of this post, I am going to refer to this as the 'removable' storage, and it will refer to a removable SD card, which a person has physically plugged into the device. 
 
 ### Android is Linux-based
 Most developers building for Android are also aware, on some level, that the operating system underneath the Dalvik VM is a Linux based one. 
@@ -21,7 +21,7 @@ This is both simultaneously easy to answer, and hard to solve. Easy, because we 
 
 To make matters worse, some manufacturers have hijacked the name of the _internal_ storage, and often called it something stupid like `sdcard0`.
 
-On most Linux systems (which Android systems are based on), there's a file in the `/proc/` directory called `mounts`, which contains a (sometimes very long) list of all the file systems mounted on the device. 
+On most Linux systems, there's a file in the `/proc/` directory called `mounts`, which contains a (sometimes very long) list of all the file systems mounted on the device. 
 
 It's a text file. And it doesn't require any special user permissions or device rooting to read it (though writing to it is another matter!).
 
@@ -52,9 +52,7 @@ Remember to turn on `READ_EXTERNAL_STORAGE` and `WRITE_EXTERNAL_STORAGE` permiss
 
 Now we can do a simple call to `System.IO.File.ReadAllText("/proc/mounts")` to read the text out of this file, and store it in a string. We can then parse the string to look for things like  `storage`, `sdcard`, `vfat`, `ext` and anything else we think would be a good indicator. And if we can find __all of that on one file-system line__, then the file system mounted there is very likely a good candidate for our _removable_ SD card.
 
-From the example in this repo:
-
-So, after some hacky string parsing (because quick-and-dirty-hacks are how we roll):
+So, after some hacky string parsing (because quick-and-dirty-hacks are how we roll) from the example in this repo:
 
 ```csharp
 
@@ -82,7 +80,7 @@ It's quite likely that this may not be quite good enough, because the manufactur
 OK, so now we've established how to locate the SD card (assuming we have one plugged in!). 
 
 ### Can We Write To It?
-How do we know if it's writeable? We could get all complex and try and figure out what type of user permissions we have, look at attributes on the file system and get all hard-core rock-star-coder complicated. Or we could simply just try and write to that file system (this could involve writing a file, creating a directory, deleting a file, etc.). 
+How do we know if it's writeable? We could get all complex and try and figure out what type of user permissions we have, look at attributes on the file system and get all hard-core rock-star-coder complicated. Or we could simply just try and write to it (this could involve writing a file, creating a directory, deleting a file, etc.). 
 
 
 ```csharp
