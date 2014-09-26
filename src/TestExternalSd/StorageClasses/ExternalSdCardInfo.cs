@@ -11,7 +11,7 @@ namespace TestExternalSd.StorageClasses
     /// </summary>
     public static bool ExternalSdCardExists
     {
-      get { return !string.IsNullOrWhiteSpace(GetExternalSdCardPath()); }
+      get { return !string.IsNullOrWhiteSpace(Path); }
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ namespace TestExternalSd.StorageClasses
 
     private static FileSystemBlockInfo GetFileSystemBlockInfo()
     {
-      if (!string.IsNullOrWhiteSpace(GetExternalSdCardPath()))
+      if (!string.IsNullOrWhiteSpace(Path))
       {
         _fileSystemBlockInfo = ExternalSdStorageHelper.GetFileSystemBlockInfo(_path);
         return _fileSystemBlockInfo;
@@ -57,7 +57,7 @@ namespace TestExternalSd.StorageClasses
 
     private static bool IsExternalCardWriteable()
     {
-      if (string.IsNullOrWhiteSpace(GetExternalSdCardPath()))
+      if (string.IsNullOrWhiteSpace(Path))
       {
         return false;
       }
