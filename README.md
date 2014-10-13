@@ -183,10 +183,14 @@ And that gives us the info we need to be able to track how much space we have, a
 The example solution in this repo ties this all together, with a simple UI to show the mount point of a removable SD card (as pertains to my SGS I, SGS II and a couple of other devices I've tried). I hope it's of use to someone. And if you find any funky-named removable SD card mounts which the hacky parsing we did above wouldn't have caught, please add it, and send through pull request! :)
 
 ### Damn You Android KitKat!
-One caveat: __Android KitKat (aka 4.4, aka level 19, and presumably higher)__ won't let you __write__ to this removable disk. Ironically, earlier, more primitive versions of Android do. 
+One caveat: __Android KitKat (aka 4.4, aka level 19, and presumably higher)__ won't let you __write__ to wherever you like on this removable disk. Ironically, earlier, more primitive versions of Android do. 
 
-Why did they do this? I'm not really sure. Maybe it's an 'everything you store on our non-removable-poorly-named-externally-available-internal-storage are belong to us!'. Maybe they're tired of removable SD cards. Maybe it's a cost-cutting thing. Maybe they want to try and force people to shift their stuff into Google's cloud. I dunno... maybe I've got the wrong end of the stick this time too.
+### Google Y U No Allow Access To SD Cards in KitKat?!
+The general consensus seems to be for security reasons. Basically stopping random or rogue apps from writing to places they don't own. There are some patches and apps which can fix this for you, but they all appear to require rooting your device. KitKat doesn't block you completely from writing to the SD card, but it means you have to make sure your data is stored somewhere "private" to the app. This will be someplace like [externalSdpath]/Android/data/your.package.name/files/yourFolderName.
 
-But it's my foot, I should be able to shoot myself in it if I want to, right?
+There's some more information on [Google](https://www.google.com/search?q=android+kitkat+SD+card), some apps [here](https://play.google.com/store/apps/details?id=com.geeksoft.extcardpatch&hl=en) and [here](https://play.google.com/store/apps/details?id=nextapp.sdfix&hl=en) which may help you figure out what you'll need to do to make it work. And there's some explanations of what other app developers have done to 'fix' their apps over here at [BeyondPod](http://www.beyondpod.com/Android/help/FAQKitKatSDReadOnly.htm) and [doubleTwist](https://www.doubletwist.com/help/question/what-are-the-changes-to-sd-card-support-in-android-44-kitkat/). 
+Unfortunately, it looks like your users will now also lose whatever data your app has generated if you put your data in these sandboxed folders (though app upgrades are fine).
+
+_Note: I'm not affiliated with any of these devs or apps_
 
 _Everything in here is released as OSS under the MIT license, so feel free to use it any way you like._
