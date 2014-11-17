@@ -1,3 +1,5 @@
+using Android.OS;
+
 namespace TestExternalSd.StorageClasses
 {
   public static class ExternalSdCardInfo
@@ -68,7 +70,15 @@ namespace TestExternalSd.StorageClasses
 
     private static string GetExternalSdCardPath()
     {
-      _path = ExternalSdStorageHelper.GetExternalSdCardPath();
+      _path = string.Empty;
+      if (Android.OS.Build.VERSION.SdkInt <= BuildVersionCodes.JellyBeanMr2)
+      {
+        _path = ExternalSdStorageHelper.GetExternalSdCardPath();
+      }
+      else
+      {
+        _path = ExternalSdStorageHelper.GetExternalSdCardPathEx();
+      }
       return _path;
     }
   }
