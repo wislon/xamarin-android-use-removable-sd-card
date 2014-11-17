@@ -5,7 +5,7 @@ namespace TestExternalSd.StorageClasses
   public static class ExternalSdCardInfo
   {
     private static string _path = null;
-    private static bool? _isWriteable;
+    private static bool _isWriteable;
     private static FileSystemBlockInfo _fileSystemBlockInfo = null;
 
     /// <summary>
@@ -22,19 +22,21 @@ namespace TestExternalSd.StorageClasses
     /// </summary>
     public static string Path
     {
-      get { return _path ?? GetExternalSdCardPath(); }
+      get
+      {
+        return _path ?? GetExternalSdCardPath();
+      }
     }
 
     /// <summary>
-    /// Returns whether the external SD card is writeable. The first
-    /// call to this is an expensive one, because it actually tries to
-    /// write a test file to the external disk
+    /// Returns whether the external SD card is writeable. You need to have
+    /// tried to access the <see cref="Path"/> or <see cref="ExternalSdCardExists"/> 
+    /// property before the result of this makes any sense (it will always be false).
     /// </summary>
     public static bool IsWriteable
     {
-      get { return _isWriteable ?? IsExternalCardWriteable(); }
+      get { return _isWriteable; }
     }
-
 
     /// <summary>
     /// The values in the <see cref="FileSystemBlockInfo"/> object may have
@@ -48,7 +50,7 @@ namespace TestExternalSd.StorageClasses
 
     private static FileSystemBlockInfo GetFileSystemBlockInfo()
     {
-      if (!string.IsNullOrWhiteSpace(Path))
+      if (!string.IsNullOrWhiteSpace(_path))
       {
         _fileSystemBlockInfo = ExternalSdStorageHelper.GetFileSystemBlockInfo(_path);
         return _fileSystemBlockInfo;
@@ -59,13 +61,7 @@ namespace TestExternalSd.StorageClasses
 
     private static bool IsExternalCardWriteable()
     {
-      if (string.IsNullOrWhiteSpace(Path))
-      {
-        return false;
-      }
-
-      _isWriteable = ExternalSdStorageHelper.IsWriteable(_path);
-      return _isWriteable.Value;
+      return _isWriteable;
     }
 
     private static string GetExternalSdCardPath()
@@ -79,6 +75,7 @@ namespace TestExternalSd.StorageClasses
       {
         _path = ExternalSdStorageHelper.GetExternalSdCardPathEx();
       }
+      _isWriteable = ExternalSdStorageHelper.IsWriteable(_path);
       return _path;
     }
   }
