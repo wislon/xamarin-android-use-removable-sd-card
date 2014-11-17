@@ -40,8 +40,8 @@ namespace TestExternalSd.StorageClasses
       string procMounts = ReadProcMounts();
       string sdCardEntry = ParseProcMounts(procMounts);
 
-      // note that isWriteable may fail if the disk is mounted elsewhere
-      if (!string.IsNullOrWhiteSpace(sdCardEntry) && IsWriteable(sdCardEntry))
+      // note that IsWriteable may fail if the disk is mounted elsewhere, e.g. MTP to PC
+      if (!string.IsNullOrWhiteSpace(sdCardEntry))
       {
         return sdCardEntry;
       }
@@ -71,20 +71,24 @@ namespace TestExternalSd.StorageClasses
     public static bool IsWriteable(string pathToTest)
     {
       bool result = false;
-      const string someTestText = "some test text";
-      try
+
+      if (!string.IsNullOrWhiteSpace(pathToTest))
       {
-        string testFile = string.Format("{0}/{1}.txt", pathToTest, Guid.NewGuid());
-        Log.Info("ExternalSDStorageHelper", "Trying to write some test data to {0}", testFile);
-        System.IO.File.WriteAllText(testFile, someTestText);
-        Log.Info("ExternalSDStorageHelper", "Success writing some test data to {0}!", testFile);
-        System.IO.File.Delete(testFile);
-        Log.Info("ExternalSDStorageHelper", "Cleaned up test data file {0}", testFile);
-        result = true;
-      }
-      catch (Exception ex) // shut up about it and move on, we obviously can't have it, so it's dead to us, we can't use it.
-      {
-        Log.Error("ExternalSDStorageHelper", string.Format("Exception: {0}\r\nMessage: {1}\r\nStack Trace: {2}", ex, ex.Message, ex.StackTrace));
+        const string someTestText = "some test text";
+        try
+        {
+          string testFile = string.Format("{0}/{1}.txt", pathToTest, Guid.NewGuid());
+          Log.Info("ExternalSDStorageHelper", "Trying to write some test data to {0}", testFile);
+          System.IO.File.WriteAllText(testFile, someTestText);
+          Log.Info("ExternalSDStorageHelper", "Success writing some test data to {0}!", testFile);
+          System.IO.File.Delete(testFile);
+          Log.Info("ExternalSDStorageHelper", "Cleaned up test data file {0}", testFile);
+          result = true;
+        }
+        catch (Exception ex) // shut up about it and move on, we obviously can't have it, so it's dead to us, we can't use it.
+        {
+          Log.Error("ExternalSDStorageHelper", string.Format("Exception: {0}\r\nMessage: {1}\r\nStack Trace: {2}", ex, ex.Message, ex.StackTrace));
+        }
       }
       return result;
     }
