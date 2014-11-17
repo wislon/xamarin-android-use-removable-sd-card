@@ -177,8 +177,9 @@ namespace TestExternalSd.StorageClasses
 
     /// <summary>
     /// Extended SD Card path location for KitKat (Android 19 / 4.4) and upwards.
-    /// Must be called only devices >= KitKat or it'll crash, since some of these
-    /// OS/API calls were only introduced in Android SDK level 19. 
+    /// Must be called only on devices >= KitKat or it'll crash, since some of these OS/API calls were 
+    /// only introduced in Android SDK level 19. 
+    /// !!! Files in here will be deleted when app uninstalled !!!
     /// See http://developer.android.com/reference/android/content/Context.html#getExternalFilesDirs%28java.lang.String%29
     /// for more about GetExternalFilesDirs() - for an SD card it forces us to only write into that directory, we can't 
     /// write outside it. On the flip-side, we don't need write permission any more on >= KitKat.
@@ -187,6 +188,8 @@ namespace TestExternalSd.StorageClasses
     public static string GetExternalSdCardPathEx()
     {
       File[] externalFilesDirs = Android.App.Application.Context.GetExternalFilesDirs(null);
+      // File[] externalFilesDirs = Android.App.Application.Context.GetExternalMediaDirs(string) // available as of 21 (Lollipop)
+
       // Array.ForEach(externalFilesDirs, efd => Log.Debug("ExternalSDStorageHelper", "Path: {0}\r\nMount State: {1}", efd.AbsolutePath, Android.OS.Environment.GetStorageState(efd)));
       // D/ExternalSDStorageHelper(31949): Path: /storage/emulated/0/Android/data/TestExternalSSD.TestExternalSSD/files
       // D/ExternalSDStorageHelper(31949): Mount State: mounted
@@ -198,7 +201,7 @@ namespace TestExternalSd.StorageClasses
       // ignored, you won't see it in these results.
       if (externalFilesDirs.Any())
       {
-        var internalPath = externalFilesDirs[0].AbsolutePath.Split('/');
+        // var internalPath = externalFilesDirs[0].AbsolutePath.Split('/');
         // up to parent - i.e. >= 'app' dir, this works: return string.Format("/{0}/{1}/{2}/{3}/{4}/{5}", internalPath[1], internalPath[2], internalPath[3], internalPath[4], internalPath[5], internalPath[6]);
         // up to parent x 2 -  <  'app' dir doesn't work: return string.Format("/{0}/{1}/{2}/{3}/{4}", internalPath[1], internalPath[2], internalPath[3], internalPath[4], internalPath[5]);
         // return externalFilesDirs.Length > 1 ? externalFilesDirs[1].AbsolutePath : externalFilesDirs[0].AbsolutePath;
