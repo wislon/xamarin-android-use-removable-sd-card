@@ -198,8 +198,9 @@ namespace TestExternalSd.StorageClasses
       // ignored, you won't see it in these results.
       if (externalFilesDirs.Any())
       {
-        // var internalPath = externalFilesDirs[0].AbsolutePath.Split('/');
-        // return string.Format("/{0}/{1}/{2}", internalPath[1], internalPath[2], internalPath[3]);
+        var internalPath = externalFilesDirs[0].AbsolutePath.Split('/');
+        // up to parent - i.e. >= 'app' dir, this works: return string.Format("/{0}/{1}/{2}/{3}/{4}/{5}", internalPath[1], internalPath[2], internalPath[3], internalPath[4], internalPath[5], internalPath[6]);
+        // up to parent x 2 -  <  'app' dir doesn't work: return string.Format("/{0}/{1}/{2}/{3}/{4}", internalPath[1], internalPath[2], internalPath[3], internalPath[4], internalPath[5]);
         // return externalFilesDirs.Length > 1 ? externalFilesDirs[1].AbsolutePath : externalFilesDirs[0].AbsolutePath;
         return externalFilesDirs.Length > 1 ? externalFilesDirs[1].AbsolutePath : string.Empty; // we only want the external drive, otherwise nothing!
       }
