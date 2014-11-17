@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Text;
 using Android.OS;
+using Android.Text;
 using Android.Util;
+using Java.IO;
 
 namespace TestExternalSd.StorageClasses
 {
@@ -106,7 +108,7 @@ namespace TestExternalSd.StorageClasses
         var bestCandidate = candidateProcMountEntries
           .FirstOrDefault(s => s.IndexOf("ext", StringComparison.OrdinalIgnoreCase) >= 0
                                && s.IndexOf("sd", StringComparison.OrdinalIgnoreCase) >= 0
-                               && s.IndexOf("vfat", StringComparison.OrdinalIgnoreCase) >= 0);
+                               && s.IndexOf("fat", StringComparison.OrdinalIgnoreCase) >= 0); // you can have things like fat, vfat, exfat, texfat, etc.
 
         // e.g. /dev/block/vold/179:9 /storage/extSdCard vfat rw,dirsync,nosuid, blah
         if (!string.IsNullOrWhiteSpace(bestCandidate))
@@ -171,6 +173,37 @@ namespace TestExternalSd.StorageClasses
         // ReSharper restore CSharpWarnings::CS0618
       }
       return fsbi;
+    }
+
+    /// <summary>
+    /// Extended SD Card path location for KitKat (Android 19 / 4.4) and upwards.
+    /// Must be called only devices >= KitKat or it'll crash, since some of these
+    /// OS/API calls were only introduced in Android SDK level 19. 
+    /// See http://developer.android.com/reference/android/content/Context.html#getExternalFilesDirs%28java.lang.String%29
+    /// for more about GetExternalFilesDirs() - for an SD card it forces us to only write into that directory, we can't 
+    /// write outside it. On the flip-side, we don't need write permission any more on >= KitKat.
+    /// </summary>
+    /// <returns></returns>
+    public static string GetExternalSdCardPathEx()
+    {
+      File[] externalFilesDirs = Android.App.Application.Context.GetExternalFilesDirs(null);
+      // Array.ForEach(externalFilesDirs, efd => Log.Debug("ExternalSDStorageHelper", "Path: {0}\r\nMount State: {1}", efd.AbsolutePath, Android.OS.Environment.GetStorageState(efd)));
+      // D/ExternalSDStorageHelper(31949): Path: /storage/emulated/0/Android/data/TestExternalSSD.TestExternalSSD/files
+      // D/ExternalSDStorageHelper(31949): Mount State: mounted
+      // D/ExternalSDStorageHelper(31949): Path: /storage/external_SD/Android/data/TestExternalSSD.TestExternalSSD/files
+      // D/ExternalSDStorageHelper(31949): Mount State: mounted
+
+      // if there are any items, the first will always be INTERNAL storage. Any subsequent items will be removable storage which
+      // is permanently mounted (like inside the case, in an SD card slot). "Transient" storage like external USB drives is 
+      // ignored, you won't see it in these results.
+      if (externalFilesDirs.Any())
+      {
+        // var internalPath = externalFilesDirs[0].AbsolutePath.Split('/');
+        // return string.Format("/{0}/{1}/{2}", internalPath[1], internalPath[2], internalPath[3]);
+        // return externalFilesDirs.Length > 1 ? externalFilesDirs[1].AbsolutePath : externalFilesDirs[0].AbsolutePath;
+        return externalFilesDirs.Length > 1 ? externalFilesDirs[1].AbsolutePath : string.Empty; // we only want the external drive, otherwise nothing!
+      }
+      return string.Empty;
     }
   }
 }
