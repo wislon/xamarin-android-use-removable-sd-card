@@ -57,13 +57,7 @@ namespace TestExternalSd.StorageClasses
       }
       return null;
     }
-
-
-    private static bool IsExternalCardWriteable()
-    {
-      return _isWriteable;
-    }
-
+    
     private static string GetExternalSdCardPath()
     {
       _path = string.Empty;
