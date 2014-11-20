@@ -69,7 +69,10 @@ namespace TestExternalSd.StorageClasses
       {
         _path = ExternalSdStorageHelper.GetExternalSdCardPathEx();
       }
-      _isWriteable = ExternalSdStorageHelper.IsWriteable(_path);
+      if (!string.IsNullOrWhiteSpace(_path))
+      {
+        _isWriteable = ExternalSdStorageHelper.IsWriteable(_path);
+      }
       return _path;
     }
   }
