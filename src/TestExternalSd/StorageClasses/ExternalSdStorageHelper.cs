@@ -41,7 +41,7 @@ namespace TestExternalSd.StorageClasses
       string procMounts = ReadProcMounts();
       string sdCardEntry = ParseProcMounts(procMounts);
 
-      // note that IsWriteable may fail if the disk is mounted elsewhere, e.g. MTP to PC
+      // note that IsWritable may fail if the disk is mounted elsewhere, e.g. MTP to PC
       if (!string.IsNullOrWhiteSpace(sdCardEntry))
       {
         return sdCardEntry;
@@ -69,7 +69,7 @@ namespace TestExternalSd.StorageClasses
     /// or anywhere else you want to test (WITHOUT the trailing '/'). If you try to write to somewhere 
     /// you're not allowed to, you may get eaten by a dragon.</param>
     /// <returns>True if it could write to it, false if not</returns>
-    public static bool IsWriteable(string pathToTest)
+    public static bool IsWritable(string pathToTest)
     {
       bool result = false;
 
