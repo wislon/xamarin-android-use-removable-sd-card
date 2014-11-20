@@ -5,7 +5,7 @@ namespace TestExternalSd.StorageClasses
   public static class ExternalSdCardInfo
   {
     private static string _path = null;
-    private static bool _isWriteable;
+    private static bool _isWritable;
     private static FileSystemBlockInfo _fileSystemBlockInfo = null;
 
     /// <summary>
@@ -33,9 +33,9 @@ namespace TestExternalSd.StorageClasses
     /// tried to access the <see cref="Path"/> or <see cref="ExternalSdCardExists"/> 
     /// property before the result of this makes any sense (it will always be false).
     /// </summary>
-    public static bool IsWriteable
+    public static bool IsWritable
     {
-      get { return _isWriteable; }
+      get { return _isWritable; }
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ namespace TestExternalSd.StorageClasses
       }
       if (!string.IsNullOrWhiteSpace(_path))
       {
-        _isWriteable = ExternalSdStorageHelper.IsWritable(_path);
+        _isWritable = ExternalSdStorageHelper.IsWritable(_path);
       }
       return _path;
     }

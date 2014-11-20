@@ -46,7 +46,7 @@ namespace TestExternalSd
             .AppendFormat("Free Size: {0:###.00}GB", fsbi.FreeSizeBytes/gigabytes).AppendLine()
             .ToString();
 
-        string isWriteable = ExternalSdCardInfo.IsWriteable.ToString();
+        string isWriteable = ExternalSdCardInfo.IsWritable.ToString();
 
         _txtExtSdCardUsage.Text = string.Format("Is writeable: {0}\r\nUsage:{1}", isWriteable, externalSdUsage);
       }
