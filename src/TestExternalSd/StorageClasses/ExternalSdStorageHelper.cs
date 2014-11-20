@@ -4,6 +4,7 @@ using System.Text;
 using Android.OS;
 using Android.Text;
 using Android.Util;
+using Android.Widget;
 using Java.IO;
 
 namespace TestExternalSd.StorageClasses
@@ -183,7 +184,7 @@ namespace TestExternalSd.StorageClasses
     /// Extended SD Card path location for KitKat (Android 19 / 4.4) and upwards.
     /// Must be called only on devices >= KitKat or it'll crash, since some of these OS/API calls were 
     /// only introduced in Android SDK level 19. 
-    /// !!! Files in here will be deleted when app uninstalled !!!
+    /// !!! Files in here will be deleted when app is uninstalled !!!
     /// See http://developer.android.com/reference/android/content/Context.html#getExternalFilesDirs%28java.lang.String%29
     /// for more about GetExternalFilesDirs() - for an SD card it forces us to only write into that directory, we can't 
     /// write outside it. On the flip-side, we don't need write permission any more on >= KitKat.
@@ -194,22 +195,25 @@ namespace TestExternalSd.StorageClasses
       File[] externalFilesDirs = Android.App.Application.Context.GetExternalFilesDirs(null);
       // File[] externalFilesDirs = Android.App.Application.Context.GetExternalMediaDirs(string) // available as of 21 (Lollipop)
 
-      // Array.ForEach(externalFilesDirs, efd => Log.Debug("ExternalSDStorageHelper", "Path: {0}\r\nMount State: {1}", efd.AbsolutePath, Android.OS.Environment.GetStorageState(efd)));
-      // D/ExternalSDStorageHelper(31949): Path: /storage/emulated/0/Android/data/TestExternalSSD.TestExternalSSD/files
-      // D/ExternalSDStorageHelper(31949): Mount State: mounted
-      // D/ExternalSDStorageHelper(31949): Path: /storage/external_SD/Android/data/TestExternalSSD.TestExternalSSD/files
-      // D/ExternalSDStorageHelper(31949): Mount State: mounted
+      // Array.ForEach(externalFilesDirs, efd => Log.Debug("ExternalSDStorageHelper", "Path: {0} - Mount State: {1}", efd.AbsolutePath, Android.OS.Environment.GetStorageState(efd)));
+      // D/ExternalSDStorageHelper(31949): Path: /storage/emulated/0/Android/data/TestExternalSSD.TestExternalSSD/files - Mount State: mounted
+      // D/ExternalSDStorageHelper(31949): Path: /storage/external_SD/Android/data/TestExternalSSD.TestExternalSSD/files - Mount State: mounted
 
-      // if there are any items, the first will always be INTERNAL storage. Any subsequent items will be removable storage which
-      // is permanently mounted (like inside the case, in an SD card slot). "Transient" storage like external USB drives is 
-      // ignored, you won't see it in these results.
+      // if there are any items, the FIRST will always be INTERNAL storage (not the SD cardO). 
+      // Any subsequent items will be removable storage which is considered 'permanently' mounted 
+      // (like inside the case, in an SD card slot). 
+      // "Transient" storage like external USB drives is ignored, you won't see it in these results.
       if (externalFilesDirs.Any())
       {
-        // var internalPath = externalFilesDirs[0].AbsolutePath.Split('/');
-        // up to parent - i.e. >= 'app' dir, this works: return string.Format("/{0}/{1}/{2}/{3}/{4}/{5}", internalPath[1], internalPath[2], internalPath[3], internalPath[4], internalPath[5], internalPath[6]);
-        // up to parent x 2 -  <  'app' dir doesn't work: return string.Format("/{0}/{1}/{2}/{3}/{4}", internalPath[1], internalPath[2], internalPath[3], internalPath[4], internalPath[5]);
-        // return externalFilesDirs.Length > 1 ? externalFilesDirs[1].AbsolutePath : externalFilesDirs[0].AbsolutePath;
-        return externalFilesDirs.Length > 1 ? externalFilesDirs[1].AbsolutePath : string.Empty; // we only want the external drive, otherwise nothing!
+        //string fullInternalPath = externalFilesDirs[0].AbsolutePath; // the INTERNAL disk. This is writeable.
+        //string internalPathRoot = fullInternalPath.Substring(0, fullInternalPath.IndexOf("Android") - 1);
+        //return internalPathRoot; // this is writeable too. Anywhere in between is NOT writeable
+
+        string externalSdPath = externalFilesDirs.Length > 1 ? externalFilesDirs[1].AbsolutePath : string.Empty; // we only want the external drive, otherwise nothing!
+
+        // note that in the case of an SD card, ONLY the path it returns is writeable. You can 
+        // drop back to the "root" as we did with the internal one above, but that's readonly.
+        return externalSdPath;
       }
       return string.Empty;
     }
